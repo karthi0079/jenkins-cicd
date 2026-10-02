@@ -18,5 +18,18 @@ pipeline {
                 '''
             }
         }
+
+        stage('Deploy') {
+            steps {
+                echo 'Deploying application...'
+                sh '''
+                    docker rm -f jenkins-cicd-app || true
+                    docker run -d \
+                        --name jenkins-cicd-app \
+                        -p 8083:80 \
+                        jenkins-cicd-app:${BUILD_NUMBER}
+                '''
+            }
+        }
     }
 }
